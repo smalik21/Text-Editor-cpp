@@ -149,7 +149,7 @@ int main() {
     Editor a;
     a.open_file(root);
     a.display(root);
-    a.add_line_at(root);
+    a.add_line(root);
     a.display(root);
     a.save_file(root);
 }
