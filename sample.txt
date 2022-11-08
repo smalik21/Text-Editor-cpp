@@ -1,0 +1,3 @@
+Your welcome message should generally be succinct, friendly, and informative. 
+It should clearly confirm and clarify what your subscriber signed up for, 
+as well as provide instructions on how they can opt out.
