@@ -7,7 +7,7 @@ class Node {
     string data;
     Node* next;
 
-    Node(string data) {
+    Node(string data) {     // constructor
         this -> data = data;
         this -> next = NULL;
     }
@@ -48,7 +48,7 @@ class Editor {
 
         Node* temp = new Node(line);
 
-        if(line_no == 0) {
+        if(line_no == 1) {      // add node to the head of list
             temp -> next = root;
             root = temp;
             return;
@@ -56,16 +56,41 @@ class Editor {
 
         Node* root_ref = root;
 
-        for(int i=1; i<line_no-1; i++) {
-            root_ref = root_ref -> next;
+        for(int i=1; i<line_no-1; i++) {       // traverse till the specified index is reached
+            root_ref = root_ref -> next;    
         }
 
-        temp -> next = root_ref -> next;
-        root_ref -> next = temp;
+        temp -> next = root_ref -> next;    // insert the node
+        root_ref -> next = temp;    
     }
 
-    void delete_line(Node* &root) {
+    void replace_line(Node* &root) {    // replace two lines using their indexes
 
+
+    }
+
+    void delete_line(Node* &root) {     // delete a line whose index is given by the user
+
+        int line_no;
+        cout << "Enter line number to delete: ";
+        cin >> line_no;
+        
+        if(line_no == 1) {      // delete node at the head of list
+            Node* temp = root;
+            root = root -> next;
+            delete temp;        // free up space 
+            return;
+        }
+
+        Node* root_ref = root;
+
+        for(int i=1; i<line_no-1; i++) {       // traverse till the specified index is reached
+            root_ref = root_ref -> next;    
+        }
+
+        Node* temp = root_ref -> next;
+        root_ref -> next = temp -> next;
+        delete temp;        // free up space
     }
 
     void open_file(Node* &root) {   // read a file and return the head of linked list
@@ -80,9 +105,9 @@ class Editor {
             cout << "File couldn't open successfully." << endl;
             return;
         }
-
-        Node* root_ref = NULL;
-        Node* temp = NULL;
+        else {
+            cout << "File opened successfully." << endl;
+        }
 
         while(getline(file, line)) {    // execute until file is read completely
 
@@ -91,19 +116,16 @@ class Editor {
                 root = new Node(line);      // head node
                 continue;   
             }
-            root_ref = root;
+            Node* root_ref = root;
 
             while(root_ref -> next != NULL) {   
                 root_ref = root_ref -> next;    // traverse till the end of linked list
             }
 
-            temp = new Node(line);    
+            Node* temp = new Node(line);    
             root_ref -> next = temp;
         }
-        if(sizeof(line) == 0) {
-            root_ref -> next = NULL;
-            delete temp;
-        }
+        
 
         file.close();   
     }   
@@ -122,16 +144,11 @@ class Editor {
             file << line << endl;
             root_ref = root_ref -> next;
         }
-
+        cout << "File saved successfully." << endl;
         file.close();
     }
 
-    void begin() {      
-        
-
-    }
-
-    void display(Node* root) {
+    void display(Node* root) {      // display the content of file
         cout << "Current text:" << endl;
         int i=0;
         while(root != NULL) {
@@ -141,15 +158,64 @@ class Editor {
         }
         cout << endl;
     }
+
+    void begin(Node* &root) {     
+
+        open_file(root);
+
+        int select;
+
+        while(1) {
+            cout << "Enter your Selection:" << endl;
+            cout << "1. Insert line" << endl;
+            cout << "2. Insert line at index" << endl; 
+            cout << "3. Replace a line" << endl;
+            cout << "4. Interchange two lines" << endl;
+            cout << "5. Delete line" << endl;
+            cout << "6. Display text file" << endl;
+            cout << "7. Save File" << endl;
+            cout << "-1. Exit" << endl;
+            cout << ">> ";
+
+            cin >> select;
+            cin.ignore();
+            switch(select) 
+            {
+                case 1:
+                    add_line(root);
+                    break;
+                case 2:
+                    add_line_at(root);
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    delete_line(root);
+                    break;
+                case 6:
+                    display(root);
+                    break;
+                case 7:
+                    save_file(root);
+                    break;
+                case -1:
+                    cout << "Editor exited...";
+                    return;
+                
+            }
+        }
+    }
 };
 
 int main() {
 
     Node* root = NULL;
     Editor a;
-    a.open_file(root);
-    a.display(root);
-    a.add_line(root);
-    a.display(root);
-    a.save_file(root);
+
+    a.begin(root);
+
+    return 0;
 }
