@@ -223,8 +223,7 @@ class Editor {
             Node* temp = new Node(line);    
             root_ref -> next = temp;
         }
-        
-
+    
         file.close();   
     }   
 
@@ -246,8 +245,41 @@ class Editor {
         file.close();
     }
 
-    void undo() {
+    void push_root(Node* root, stack<Node*> &st) {
         
+        Node* head = NULL;
+
+        while(root != NULL) {
+
+            if(head == NULL) {
+                head = new Node(root -> data);
+                root = root -> next;
+                continue;
+            }
+
+            Node* head_ref = head;
+            while(head_ref -> next != NULL) {
+                head_ref = head_ref -> next;
+            }
+
+            Node* temp = new Node(root -> data);
+            head_ref -> next = temp;
+
+            root = root -> next;
+        }
+
+        st.push(head);
+    }
+
+    void undo(Node* &root, stack<Node*> &st) {
+
+        if(st.size() > 1) {
+            st.pop();
+            root = st.top();
+        }
+        else {
+            cout << "UNDO unavailable..." << endl;
+        }
     }
 
     void display(Node* root) {      // display the content of file
@@ -265,6 +297,8 @@ class Editor {
 
         open_file(root);
 
+        stack<Node*> st;
+        push_root(root, st);
         int select;
 
         while(1) {
@@ -286,22 +320,27 @@ class Editor {
             switch(select) 
             {
                 case 1:
-                    add_line(root);              
+                    add_line(root);           
+                    push_root(root, st);   
                     break;
                 case 2:
-                    add_line_at(root);                    
+                    add_line_at(root);      
+                    push_root(root, st);               
                     break;
                 case 3:
-                    replace_line(root);                   
+                    replace_line(root);  
+                    push_root(root, st);                  
                     break;
                 case 4:
-                    interchange_lines(root);             
+                    interchange_lines(root);
+                    push_root(root, st);              
                     break;
                 case 5:
-                    delete_line(root);                  
+                    delete_line(root);           
+                    push_root(root, st);        
                     break;
                 case 6:
-                    undo();
+                    undo(root, st);
                     break;
                 case 7:
                     display(root);
@@ -326,3 +365,7 @@ int main() {
 
     return 0;
 }
+
+
+// create a copy of the linked list with all the node's data
+// push the head of the newly created linked list in the stack
