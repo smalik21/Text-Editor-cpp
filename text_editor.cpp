@@ -3,6 +3,8 @@
 #include <stack>
 using namespace std;
 
+
+
 class Node {
     public:
     string data;
@@ -13,6 +15,8 @@ class Node {
         this -> next = NULL;
     }
 };
+
+void display(Node*);
 
 class Editor {
     
@@ -245,11 +249,11 @@ class Editor {
         file.close();
     }
 
-    void push_root(Node* root, stack<Node*> &st) {
-        
+    void push_root(Node* root, stack<Node*> &st) {  // push the current root into stack
+
         Node* head = NULL;
 
-        while(root != NULL) {
+        while(root != NULL) {   // create a copy of linked list
 
             if(head == NULL) {
                 head = new Node(root -> data);
@@ -267,18 +271,18 @@ class Editor {
 
             root = root -> next;
         }
-
-        st.push(head);
+        
+        st.push(head);  // push the head of the list in stack
     }
 
-    void undo(Node* &root, stack<Node*> &st) {
+    void undo(Node* &root, stack<Node*> &st) {  // restore the previous state of program
 
         if(st.size() > 1) {
             st.pop();
-            root = st.top();
-        }
+            root = st.top();    // get the previous root
+        }   
         else {
-            cout << "UNDO unavailable..." << endl;
+            cout << "\nUNDO unavailable..." << endl;
         }
     }
 
@@ -329,15 +333,12 @@ class Editor {
                     break;
                 case 3:
                     replace_line(root);  
-                    push_root(root, st);                  
                     break;
                 case 4:
                     interchange_lines(root);
-                    push_root(root, st);              
                     break;
                 case 5:
                     delete_line(root);           
-                    push_root(root, st);        
                     break;
                 case 6:
                     undo(root, st);
@@ -365,7 +366,3 @@ int main() {
 
     return 0;
 }
-
-
-// create a copy of the linked list with all the node's data
-// push the head of the newly created linked list in the stack
