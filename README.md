@@ -6,4 +6,4 @@ Each line of text is stored in a node of the linked list, which consists of the 
 Insertion, deletion, and replacement of text can be done based on a specified line number to make modifications effortless. Additionally, interchanging two specified lines of text is a feature that can be used for more complex editing tasks. 
 For convenience, the program also offers an undo action that is implemented using a Stack data structure.
 
-All these features make this program highly efficient while offering users a great user experience.
+
